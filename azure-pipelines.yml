@@ -9,29 +9,47 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-jobs:
+stages:
+- stage: Build
+  jobs:
   - job: job1
     steps:
     - script: echo Hello, $(name)!
-      displayName: '1st job step 1'
+      displayName: 'STAGE BUILD 1ST JOB'
 
-    - script: |
-        echo Add other tasks to build, test, and deploy your project.
-        echo See https://aka.ms/yaml
-      displayName: '1st job step 2'
-  
-  - job: job2
+- stage: Dev
+  dependsOn: Build
+  jobs:
+  - job: job1
     steps:
-    - script: echo Hello, $(name)!
-      displayName: '2nd job step 1'
+    - script: echo Running task1
+      displayName: 'STAGE DEV 1st JOB'
+    - script: echo Running task2
+      displayName: 'STAGE DEV 2nd JOB'
 
-    - script: |
-      displayName: '2nd job step 2'
+- stage: Test
+  dependsOn: Build
+  jobs:
+    - job: job1
+      steps:
+      - script: echo Running task1
+        displayName: 'STAGE TEST 1st JOB'
+      - script: echo Running task2
+        displayName: 'STAGE TEST 2nd JOB'
+      - script: echo Running task3
+        displayName: 'STAGE TEST 3rd JOB'
 
-  - job: job3
-    steps:
-    - script: echo Hello, $(name)!
-      displayName: '3rd job step 1'
+- stage: QA
+  dependsOn: Dev Test
+  jobs:
+    - job: job1
+      steps:
+      - script: echo Running task1
+        displayName: 'STAGE QA 1st JOB'
+    - job: job2
+      dependsOn: job1
+      steps:
+      - script: echo Running task1
+        displayName: 'STAGE QA 2nd JOB'
 
-    - script: |
-      displayName: '3rd job step 2'
+
