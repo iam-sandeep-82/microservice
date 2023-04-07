@@ -40,7 +40,6 @@ stages:
         displayName: 'STAGE TEST 3rd JOB'
 
 - stage: QA
-  dependsOn: Dev Test
   jobs:
     - job: job1
       steps:
