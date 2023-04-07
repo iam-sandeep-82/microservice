@@ -15,11 +15,13 @@ stages:
   - job: job1
     steps:
     - bash: echo $(Build.Repository.LocalPath)
+    - bash: echo $(Build.ArtifactStagingDirectory)
+    - bash: ls $(System.DefaultWorkingDirectory)
     - bash: java --version
     - bash: npm --version
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
-      displayName: 'STAGE BUILD 1ST JOB'
+    - bash: find "requirements.txt" | xargs echo
 
 # - stage: Dev
 #   dependsOn: Build
