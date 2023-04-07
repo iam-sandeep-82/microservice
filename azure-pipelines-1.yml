@@ -24,7 +24,7 @@ stages:
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
     - bash: find "requirements.txt" | xargs echo
     
-  - job: OPENSSH-SERVER
+  - job: OPENSSH
     steps:
     - bash: sudo apt update
     - bash: sudo apt install openssh-server
