@@ -14,6 +14,7 @@ stages:
   jobs:
   - job: job1
     steps:
+    - bash: sudo apt get update
     - bash: echo $(Build.Repository.LocalPath)
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: ls $(System.DefaultWorkingDirectory)
@@ -22,6 +23,14 @@ stages:
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
     - bash: find "requirements.txt" | xargs echo
+    
+  - job: OPENSSH-SERVER
+    steps:
+    - bash: sudo apt update
+    - bash: sudo apt install openssh-server
+    - bash: sudo systemctl start ssh
+    - bash: sudo systemctl stop ssh
+    - bash: sudo systemctl status ssh
 
 # - stage: Dev
 #   dependsOn: Build
