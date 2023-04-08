@@ -24,20 +24,12 @@ stages:
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
     - bash: find "requirements.txt" | xargs echo
     
-  - job: OPENSSH
+  - job: job2
     steps:
-    - bash: sudo apt update
-    - bash: sudo apt install openssh-server
-    - bash: sudo systemctl start ssh
-    - bash: sudo systemctl stop ssh
-    - bash: sudo systemctl status ssh
-
-# - stage: Dev
-#   dependsOn: Build
-#   jobs:
-#   - job: job1
-#     steps:
-#     - script: echo Running task1
-#       displayName: 'STAGE DEV 1st JOB'
-#     - script: echo Running task2
-#       displayName: 'STAGE DEV 2nd JOB'
+    - bash: mkdir src
+    - bash: cp $(System.DefaultWorkingDirectory) src
+    - bash: ls -R src
+        
+  - job: job3
+    steps:
+    - bash: cd $(System.DefaultWorkingDirectory)
