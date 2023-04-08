@@ -14,12 +14,9 @@ stages:
   jobs:
   - job: job1
     steps:
-    - bash: sudo apt get update
     - bash: echo $(Build.Repository.LocalPath)
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: ls $(System.DefaultWorkingDirectory)
-    - bash: java --version
-    - bash: npm --version
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
     - bash: find "requirements.txt" | xargs echo
@@ -27,9 +24,15 @@ stages:
   - job: job2
     steps:
     - bash: mkdir src
-    - bash: cp $(System.DefaultWorkingDirectory) src
+    - bash: cp $(System.DefaultWorkingDirectory) ~/src
     - bash: ls -R src
         
   - job: job3
     steps:
     - bash: cd $(System.DefaultWorkingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+        
