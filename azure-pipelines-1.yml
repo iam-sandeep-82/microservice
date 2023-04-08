@@ -14,22 +14,19 @@ stages:
   jobs:
   - job: job1
     steps:
-    - bash: echo $(Build.Repository.LocalPath)
-    - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: ls $(System.DefaultWorkingDirectory)
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: pip freeze | xargs tee requirements.txt | xargs cat 
-    - bash: find "requirements.txt" | xargs echo
+    - bash: find "requirements.txt"
     
   - job: job2
     steps:
-    - bash: mkdir src
-    - bash: cp $(System.DefaultWorkingDirectory) ~/src
-    - bash: ls -R src
-        
-  - job: job3
-    steps:
-    - bash: cd $(System.DefaultWorkingDirectory)
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
